@@ -1,3 +1,18 @@
+// Scroll to top on page load/refresh
+window.addEventListener('beforeunload', () => {
+    window.scrollTo(0, 0);
+});
+
+// Force scroll to top on page load
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 0);
+});
+
 // Navbar scroll effect
 window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
@@ -27,21 +42,23 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 
 // Cosmic background animation
 const canvas = document.getElementById('stars-canvas');
-const ctx = canvas.getContext('2d');
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
 const stars = [];
-const starCount = 200;
+const starCount = isMobile ? 50 : 200;
 
 class Star {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 2;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.speedX = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5);
+        this.speedY = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5);
         this.opacity = Math.random();
         this.fadeSpeed = (Math.random() - 0.5) * 0.02;
     }
@@ -98,56 +115,119 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+}
 
-// Mouse trail effect
+// Mouse trail effect with mobile scroll support
 let mouseX = 0;
 let mouseY = 0;
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+// Detect if device is mobile
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+console.log('Device type:', isMobileDevice ? 'Mobile' : 'Desktop');
+
+if (!isMobileDevice) {
+    // DESKTOP: Mouse trail effect
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        if (Math.random() > 0.9) {
+            createParticle(mouseX, mouseY);
+        }
+    });
     
-    // Create particle trail
-    if (Math.random() > 0.9) {
-        createParticle(mouseX, mouseY);
-    }
-});
+    document.addEventListener('click', (e) => {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const offsetX = (Math.random() - 0.5) * 30;
+                const offsetY = (Math.random() - 0.5) * 30;
+                createParticle(e.clientX + offsetX, e.clientY + offsetY);
+            }, i * 30);
+        }
+    });
+    
+    console.log('✨ Desktop particle effects enabled');
+} else {
+    // MOBILE: Scroll-based particle effects
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = 0;
+    let scrollDirection = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const now = Date.now();
+        
+        // Only create particles if enough time has passed
+        if (now - lastScrollTime > 100) {
+            // Determine scroll direction
+            scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
+            
+            // Create particles at random positions on screen during scroll
+            const x = Math.random() * window.innerWidth;
+            const y = window.innerHeight / 2 + (Math.random() - 0.5) * 200;
+            
+            createParticle(x, y);
+            
+            lastScrollTime = now;
+        }
+        
+        lastScrollY = currentScrollY;
+    }, { passive: true });
+    
+    // MOBILE: Touch tap effect (not during scroll)
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+    }, { passive: true });
+    
+    document.addEventListener('touchend', (e) => {
+        const touchDuration = Date.now() - touchStartTime;
+        const touchEndY = e.changedTouches[0].clientY;
+        const touchDistance = Math.abs(touchEndY - touchStartY);
+        
+        // If it was a tap (not a scroll), create particles
+        if (touchDuration < 200 && touchDistance < 10) {
+            const x = e.changedTouches[0].clientX;
+            const y = e.changedTouches[0].clientY;
+            
+            // Create burst
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const offsetX = (Math.random() - 0.5) * 30;
+                    const offsetY = (Math.random() - 0.5) * 30;
+                    createParticle(x + offsetX, y + offsetY);
+                }, i * 30);
+            }
+        }
+    }, { passive: true });
+    
+    console.log('✨ Mobile scroll particle effects enabled');
+}
 
 function createParticle(x, y) {
+    if (isNaN(x) || isNaN(y) || x < 0 || y < 0) {
+        return;
+    }
+    
     const particle = document.createElement('div');
-    particle.style.position = 'fixed';
+    particle.className = 'magic-particle';
     particle.style.left = x + 'px';
     particle.style.top = y + 'px';
-    particle.style.width = '4px';
-    particle.style.height = '4px';
-    particle.style.background = 'rgba(255, 215, 0, 0.6)';
-    particle.style.borderRadius = '50%';
-    particle.style.pointerEvents = 'none';
-    particle.style.zIndex = '9999';
-    particle.style.animation = 'particleFade 1s ease-out forwards';
     
     document.body.appendChild(particle);
     
     setTimeout(() => {
-        particle.remove();
-    }, 1000);
+        if (particle.parentNode) {
+            particle.remove();
+        }
+    }, 1200);
 }
 
-// Add particle fade animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes particleFade {
-        0% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: scale(0) translateY(-50px);
-        }
-    }
-`;
-document.head.appendChild(style);
+console.log('✨ Particle system initialized');
 
 // Service panels scroll animation
 const observerOptions = {
@@ -275,3 +355,32 @@ window.addEventListener('load', () => {
 });
 
 console.log('🌟 Psychic Rama Website Loaded Successfully 🌟');
+
+// Service card navigation
+document.querySelectorAll('.service-panel').forEach(panel => {
+    panel.addEventListener('click', function() {
+        const serviceType = this.getAttribute('data-service');
+        const servicePages = {
+            'psychic': 'service-psychic.html',
+            'birth-chart': 'service-birth-chart.html',
+            'love-spell': 'service-love-spell.html',
+            'lost-love': 'service-lost-love.html',
+            'marriage': 'service-marriage.html',
+            'black-magic': 'service-black-magic.html',
+            'evil-spirits': 'service-evil-spirits.html',
+            'spiritual-healing': 'service-spiritual-healing.html',
+            'kali-puja': 'service-kali-puja.html',
+            'durga-puja': 'service-durga-puja.html',
+            'palm-reading': 'service-palm-reading.html',
+            'tarot': 'service-tarot.html',
+            'lottery': 'service-lottery.html',
+            'voodoo': 'service-voodoo.html',
+            'witchcraft': 'service-witchcraft.html',
+            'face-reading': 'service-face-reading.html'
+        };
+        
+        if (servicePages[serviceType]) {
+            window.location.href = servicePages[serviceType];
+        }
+    });
+});
