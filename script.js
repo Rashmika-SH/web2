@@ -356,6 +356,34 @@ window.addEventListener('load', () => {
 
 console.log('🌟 Psychic Rama Website Loaded Successfully 🌟');
 
+// Prevent scrolling beyond footer
+window.addEventListener('scroll', () => {
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const footerBottom = footerRect.bottom;
+        const windowHeight = window.innerHeight;
+        
+        // If footer bottom is at or above window bottom, prevent further scrolling
+        if (footerBottom <= windowHeight) {
+            const maxScroll = document.documentElement.scrollHeight - windowHeight;
+            if (window.scrollY > maxScroll) {
+                window.scrollTo(0, maxScroll);
+            }
+        }
+    }
+}, { passive: false });
+
+// Set document height to footer bottom on load
+window.addEventListener('load', () => {
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const footerBottom = footer.offsetTop + footer.offsetHeight;
+        document.body.style.height = footerBottom + 'px';
+        document.documentElement.style.height = footerBottom + 'px';
+    }
+});
+
 // Service card navigation
 document.querySelectorAll('.service-panel').forEach(panel => {
     panel.addEventListener('click', function() {
