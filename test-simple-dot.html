@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dot Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            min-height: 200vh;
+        }
+        
+        .big-dot {
+            position: fixed;
+            top: 100px;
+            left: 100px;
+            width: 50px;
+            height: 50px;
+            background: gold;
+            border-radius: 50%;
+            box-shadow: 0 0 50px gold;
+            z-index: 99999;
+        }
+        
+        .text {
+            position: fixed;
+            top: 200px;
+            left: 100px;
+            color: white;
+            font-size: 24px;
+            z-index: 99999;
+        }
+    </style>
+</head>
+<body>
+    <div class="big-dot"></div>
+    <div class="text">Can you see the GOLD DOT above this text?</div>
+    
+    <script>
+        console.log('Page loaded');
+        
+        // Create dot with JavaScript
+        const dot = document.createElement('div');
+        dot.style.cssText = `
+            position: fixed;
+            top: 300px;
+            left: 100px;
+            width: 50px;
+            height: 50px;
+            background: red;
+            border-radius: 50%;
+            z-index: 99999;
+        `;
+        document.body.appendChild(dot);
+        console.log('Red dot created with JavaScript');
+        
+        // Try to animate it
+        let top = 300;
+        setInterval(() => {
+            top += 2;
+            if (top > window.innerHeight) top = 0;
+            dot.style.top = top + 'px';
+        }, 30);
+        
+        console.log('Animation started');
+    </script>
+</body>
+</html>

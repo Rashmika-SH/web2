@@ -117,118 +117,6 @@ window.addEventListener('resize', () => {
 });
 }
 
-// Mouse trail effect with mobile scroll support
-let mouseX = 0;
-let mouseY = 0;
-
-// Detect if device is mobile
-const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-
-console.log('Device type:', isMobileDevice ? 'Mobile' : 'Desktop');
-
-if (!isMobileDevice) {
-    // DESKTOP: Mouse trail effect
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        if (Math.random() > 0.9) {
-            createParticle(mouseX, mouseY);
-        }
-    });
-    
-    document.addEventListener('click', (e) => {
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                const offsetX = (Math.random() - 0.5) * 30;
-                const offsetY = (Math.random() - 0.5) * 30;
-                createParticle(e.clientX + offsetX, e.clientY + offsetY);
-            }, i * 30);
-        }
-    });
-    
-    console.log('✨ Desktop particle effects enabled');
-} else {
-    // MOBILE: Scroll-based particle effects
-    let lastScrollY = window.scrollY;
-    let lastScrollTime = 0;
-    let scrollDirection = 0;
-    
-    window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
-        const now = Date.now();
-        
-        // Only create particles if enough time has passed
-        if (now - lastScrollTime > 100) {
-            // Determine scroll direction
-            scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
-            
-            // Create particles at random positions on screen during scroll
-            const x = Math.random() * window.innerWidth;
-            const y = window.innerHeight / 2 + (Math.random() - 0.5) * 200;
-            
-            createParticle(x, y);
-            
-            lastScrollTime = now;
-        }
-        
-        lastScrollY = currentScrollY;
-    }, { passive: true });
-    
-    // MOBILE: Touch tap effect (not during scroll)
-    let touchStartY = 0;
-    let touchStartTime = 0;
-    
-    document.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-        touchStartTime = Date.now();
-    }, { passive: true });
-    
-    document.addEventListener('touchend', (e) => {
-        const touchDuration = Date.now() - touchStartTime;
-        const touchEndY = e.changedTouches[0].clientY;
-        const touchDistance = Math.abs(touchEndY - touchStartY);
-        
-        // If it was a tap (not a scroll), create particles
-        if (touchDuration < 200 && touchDistance < 10) {
-            const x = e.changedTouches[0].clientX;
-            const y = e.changedTouches[0].clientY;
-            
-            // Create burst
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const offsetX = (Math.random() - 0.5) * 30;
-                    const offsetY = (Math.random() - 0.5) * 30;
-                    createParticle(x + offsetX, y + offsetY);
-                }, i * 30);
-            }
-        }
-    }, { passive: true });
-    
-    console.log('✨ Mobile scroll particle effects enabled');
-}
-
-function createParticle(x, y) {
-    if (isNaN(x) || isNaN(y) || x < 0 || y < 0) {
-        return;
-    }
-    
-    const particle = document.createElement('div');
-    particle.className = 'magic-particle';
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    
-    document.body.appendChild(particle);
-    
-    setTimeout(() => {
-        if (particle.parentNode) {
-            particle.remove();
-        }
-    }, 1200);
-}
-
-console.log('✨ Particle system initialized');
-
 // Service panels scroll animation
 const observerOptions = {
     threshold: 0.3,
@@ -291,23 +179,83 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Form submission
+// Initialize EmailJS
+(function() {
+    emailjs.init('sq1rrkucpE7n3EghZ');
+})();
+
+// Form submission with EmailJS
 const contactForm = document.getElementById('contactForm');
+const formMessage = document.getElementById('formMessage');
+
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    
+    // Hide any previous messages
+    formMessage.className = 'form-message';
+    formMessage.style.display = 'none';
+    
+    // Show loading state
+    submitBtn.textContent = '✨ Sending...';
+    submitBtn.disabled = true;
+    
+    // Get form data
     const formData = new FormData(contactForm);
     const data = Object.fromEntries(formData);
     
-    // Create WhatsApp message
-    const message = `New Consultation Request:\n\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.countryCode} ${data.phone}\nCountry: ${data.country}\nMessage: ${data.message}`;
+    // Prepare template parameters for EmailJS
+    const templateParams = {
+        name: data.name,
+        email: data.email,
+        phone: `${data.countryCode} ${data.phone}`,
+        country: data.country,
+        message: data.message,
+        time: new Date().toLocaleString('en-AU', { 
+            dateStyle: 'medium', 
+            timeStyle: 'short',
+            timeZone: 'Australia/Melbourne'
+        }),
+        to_email: 'astrologerpsychicrama@gmail.com'
+    };
     
-    const whatsappUrl = `https://wa.me/61415812185?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-    
-    // Show success message
-    alert('Thank you! Redirecting you to WhatsApp...');
-    contactForm.reset();
+    // Send email using EmailJS
+    emailjs.send('service_48eav41', 'template_tbyh4w8', templateParams)
+        .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            
+            // Show success message
+            formMessage.className = 'form-message success';
+            formMessage.innerHTML = '✅ <strong>Success!</strong> Your message has been sent successfully. We will contact you soon!';
+            formMessage.style.display = 'block';
+            
+            // Reset form
+            contactForm.reset();
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
+            
+            // Hide success message after 8 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 8000);
+        }, function(error) {
+            console.log('FAILED...', error);
+            
+            // Show error message
+            formMessage.className = 'form-message error';
+            formMessage.innerHTML = '❌ <strong>Oops!</strong> Something went wrong. Please try again or contact us directly via WhatsApp.';
+            formMessage.style.display = 'block';
+            
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
+            
+            // Hide error message after 8 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 8000);
+        });
 });
 
 // Parallax effect for sections

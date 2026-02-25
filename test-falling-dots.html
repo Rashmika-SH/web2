@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Falling Dots</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 300vh;
+        }
+        
+        .content {
+            padding: 50px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 100px 0;
+        }
+        
+        .instruction {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>🌟 Test Falling Dots Animation 🌟</h1>
+        
+        <div class="instruction">
+            <h2>Instructions:</h2>
+            <p>1. Scroll up and down - you should see golden dots falling</p>
+            <p>2. Move your mouse - you should see a trail</p>
+            <p>3. Click anywhere - you should see a burst effect</p>
+        </div>
+        
+        <h1>Keep Scrolling Down ⬇️</h1>
+        <h1>More Content ⬇️</h1>
+        <h1>Keep Going ⬇️</h1>
+        <h1>Almost There ⬇️</h1>
+        <h1>You Made It! 🎉</h1>
+    </div>
+
+    <script>
+        console.log('🎨 TEST PAGE LOADED');
+        
+        // Create container
+        const container = document.createElement('div');
+        container.id = 'dots-container';
+        container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+        document.body.appendChild(container);
+        
+        console.log('✅ Container created');
+        
+        // Create a falling dot
+        function createDot() {
+            const dot = document.createElement('div');
+            const size = Math.random() * 8 + 5;
+            const x = Math.random() * window.innerWidth;
+            
+            dot.style.cssText = `
+                position: absolute;
+                left: ${x}px;
+                top: -20px;
+                width: ${size}px;
+                height: ${size}px;
+                background: gold;
+                border-radius: 50%;
+                box-shadow: 0 0 ${size * 4}px gold;
+                animation: fall 3s linear forwards;
+            `;
+            
+            container.appendChild(dot);
+            console.log('✨ Dot created at x:', x);
+            
+            setTimeout(() => dot.remove(), 3000);
+        }
+        
+        // Add animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(${window.innerHeight + 50}px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Create dots on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            if (now - lastScroll > 100) {
+                console.log('📜 SCROLL - Creating 5 dots');
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => createDot(), i * 50);
+                }
+                lastScroll = now;
+            }
+        });
+        
+        // Create dots on mouse move
+        let lastMouse = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastMouse > 100) {
+                const dot = document.createElement('div');
+                dot.style.cssText = `
+                    position: fixed;
+                    left: ${e.clientX}px;
+                    top: ${e.clientY}px;
+                    width: 8px;
+                    height: 8px;
+                    background: gold;
+                    border-radius: 50%;
+                    box-shadow: 0 0 20px gold;
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: fade 0.5s ease-out forwards;
+                `;
+                document.body.appendChild(dot);
+                setTimeout(() => dot.remove(), 500);
+                lastMouse = now;
+            }
+        });
+        
+        // Add fade animation
+        const fadeStyle = document.createElement('style');
+        fadeStyle.textContent = `
+            @keyframes fade {
+                to { opacity: 0; transform: scale(0.3); }
+            }
+        `;
+        document.head.appendChild(fadeStyle);
+        
+        // Create initial dots
+        setTimeout(() => {
+            console.log('🚀 Creating initial dots');
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createDot(), i * 100);
+            }
+        }, 500);
+        
+        console.log('✨ ALL ANIMATIONS READY!');
+    </script>
+</body>
+</html>

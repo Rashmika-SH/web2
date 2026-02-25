@@ -22,6 +22,10 @@
       "areaServed": "Worldwide"
     }
     </script>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Cursor Trail Script -->
+    <script src="cursor-trail.js?v=2"></script>
 </head>
 <body>
     <div id="page-wrapper">
@@ -398,6 +402,7 @@
                     </div>
                     <input type="text" name="country" placeholder="Your Country *" required>
                     <textarea name="message" placeholder="Tell me about your situation..." rows="5" required></textarea>
+                    <div id="formMessage" class="form-message"></div>
                     <button type="submit" class="btn-primary glow-btn">Send Message</button>
                 </form>
             </div>

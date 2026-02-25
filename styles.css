@@ -34,6 +34,154 @@ body {
     flex-direction: column;
 }
 
+/* FALLING STARS ANIMATION - CSS ONLY - Multiple Layers */
+body::before {
+    content: '';
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    background: gold;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 15px gold,
+        100px 50px 0 0 gold,
+        200px 100px 0 0 orange,
+        300px 20px 0 0 yellow,
+        400px 80px 0 0 gold,
+        500px 150px 0 0 orange,
+        600px 30px 0 0 yellow,
+        700px 120px 0 0 gold,
+        800px 60px 0 0 orange,
+        900px 140px 0 0 yellow,
+        1000px 90px 0 0 gold,
+        1100px 10px 0 0 orange,
+        1200px 170px 0 0 yellow,
+        1300px 110px 0 0 gold,
+        1400px 45px 0 0 orange,
+        50px 200px 0 0 gold,
+        150px 250px 0 0 orange,
+        250px 180px 0 0 yellow,
+        350px 220px 0 0 gold,
+        450px 190px 0 0 orange,
+        550px 240px 0 0 yellow,
+        650px 210px 0 0 gold,
+        750px 270px 0 0 orange,
+        850px 230px 0 0 yellow,
+        950px 280px 0 0 gold,
+        1050px 260px 0 0 orange;
+    animation: falling 6s linear infinite;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    background: gold;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 15px gold,
+        120px 70px 0 0 orange,
+        240px 130px 0 0 yellow,
+        360px 40px 0 0 gold,
+        480px 100px 0 0 orange,
+        600px 160px 0 0 yellow,
+        720px 50px 0 0 gold,
+        840px 110px 0 0 orange,
+        960px 170px 0 0 yellow,
+        1080px 80px 0 0 gold,
+        1200px 140px 0 0 orange,
+        1320px 200px 0 0 yellow,
+        1440px 90px 0 0 gold,
+        80px 220px 0 0 yellow,
+        200px 260px 0 0 gold,
+        320px 200px 0 0 orange,
+        440px 240px 0 0 yellow,
+        560px 290px 0 0 gold,
+        680px 250px 0 0 orange,
+        800px 300px 0 0 yellow,
+        920px 270px 0 0 gold,
+        1040px 310px 0 0 orange;
+    animation: falling 8s linear infinite 1s;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes falling {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Additional falling stars layers */
+#page-wrapper::before {
+    content: '';
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    background: yellow;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 12px yellow,
+        80px 30px 0 0 yellow,
+        180px 90px 0 0 gold,
+        280px 60px 0 0 orange,
+        380px 120px 0 0 yellow,
+        480px 40px 0 0 gold,
+        580px 100px 0 0 orange,
+        680px 70px 0 0 yellow,
+        780px 130px 0 0 gold,
+        880px 50px 0 0 orange,
+        980px 110px 0 0 yellow,
+        1080px 80px 0 0 gold,
+        1180px 140px 0 0 orange,
+        1280px 60px 0 0 yellow,
+        1380px 100px 0 0 gold;
+    animation: falling 7s linear infinite 2s;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+#page-wrapper::after {
+    content: '';
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    background: orange;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 12px orange,
+        140px 55px 0 0 orange,
+        260px 115px 0 0 yellow,
+        380px 75px 0 0 gold,
+        500px 135px 0 0 orange,
+        620px 95px 0 0 yellow,
+        740px 155px 0 0 gold,
+        860px 85px 0 0 orange,
+        980px 145px 0 0 yellow,
+        1100px 105px 0 0 gold,
+        1220px 165px 0 0 orange,
+        1340px 125px 0 0 yellow;
+    animation: falling 9s linear infinite 3s;
+    pointer-events: none;
+    z-index: 9999;
+}
+
 #page-wrapper {
     background: #000;
     flex: 1;
@@ -725,6 +873,42 @@ section:last-of-type {
     border: none;
     cursor: pointer;
     font-size: 1.1rem;
+}
+
+/* Form Message Styles */
+.form-message {
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+    animation: slideDown 0.3s ease-out;
+}
+
+.form-message.success {
+    background: rgba(76, 175, 80, 0.2);
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    display: block;
+}
+
+.form-message.error {
+    background: rgba(244, 67, 54, 0.2);
+    border: 2px solid #f44336;
+    color: #f44336;
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Footer */
@@ -1848,15 +2032,15 @@ footer ~ *:not(script):not(.call-float):not(.whatsapp-float):not(style) {
 @keyframes particleFade {
     0% {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: scale(1) translate(0, 0);
     }
     50% {
-        opacity: 0.8;
-        transform: scale(1.2) translateY(-30px);
+        opacity: 0.9;
+        transform: scale(1.5) translate(var(--drift, 0), -40px);
     }
     100% {
         opacity: 0;
-        transform: scale(0.5) translateY(-60px);
+        transform: scale(0.3) translate(var(--drift, 0), -80px);
     }
 }
 
@@ -1864,10 +2048,11 @@ footer ~ *:not(script):not(.call-float):not(.whatsapp-float):not(style) {
     position: fixed;
     width: 12px;
     height: 12px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 165, 0, 0.8) 50%, rgba(255, 215, 0, 0.4) 100%);
+    background: radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 165, 0, 0.9) 40%, rgba(255, 215, 0, 0.5) 100%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99999;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 165, 0, 0.6);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 1), 0 0 50px rgba(255, 165, 0, 0.8), 0 0 75px rgba(255, 215, 0, 0.4);
     animation: particleFade 1.2s ease-out forwards;
+    --drift: 0px;
 }
