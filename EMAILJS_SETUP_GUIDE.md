@@ -1,4 +1,4 @@
-# EmailJS Setup Guide for Psychic Rama Website
+# EmailJS Setup Guide for Manvik Website
 
 ## Step 1: Create EmailJS Account
 1. Go to https://www.emailjs.com/
@@ -35,7 +35,7 @@ Message:
 {{message}}
 
 ---
-This email was sent from your Psychic Rama website contact form.
+This email was sent from your Manvik website contact form.
 ```
 
 4. Save the template and copy the **Template ID**

@@ -1,4 +1,4 @@
-# Psychic Rama - Vedic Astrology Website
+# Manvik - Vedic Astrology Website
 
 A bold, immersive, and visually powerful astrology website featuring cosmic animations, scroll-triggered storytelling, and conversion-focused design for international clients.
 
@@ -72,7 +72,7 @@ A bold, immersive, and visually powerful astrology website featuring cosmic anim
 
 ## Contact Information
 
-- **Name**: Psychic Rama
+- **Name**: Manvik
 - **Email**: astrologerpsychicrama@gmail.com
 - **Phone**: +61 415 812 185
 - **WhatsApp**: Available via floating button on website
@@ -117,4 +117,4 @@ To customize colors, edit CSS variables in `styles.css`:
 
 ## License
 
-© 2024 Psychic Rama. All Rights Reserved.
+© 2024 Manvik. All Rights Reserved.

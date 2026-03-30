@@ -302,7 +302,7 @@ window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
 
-console.log('🌟 Psychic Rama Website Loaded Successfully 🌟');
+console.log('🌟 Manvik Website Loaded Successfully 🌟');
 
 // Prevent scrolling beyond footer
 window.addEventListener('scroll', () => {
