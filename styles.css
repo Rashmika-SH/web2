@@ -1407,11 +1407,14 @@ footer ~ *:not(script):not(.call-float):not(.whatsapp-float):not(style) {
         flex: none;
         max-width: 100%;
         width: 100%;
+        padding: 1.5rem 1.5rem 0 1.5rem;
     }
 
     .hero-splash-img {
         width: 100%;
         height: auto;
+        object-fit: contain;
+        border-radius: 16px;
     }
 
     .hero-content-section {
@@ -1420,7 +1423,7 @@ footer ~ *:not(script):not(.call-float):not(.whatsapp-float):not(style) {
     }
 
     .hero-content {
-        padding: 3rem 1rem;
+        padding: 2rem 1.5rem;
         text-align: center;
     }
 
