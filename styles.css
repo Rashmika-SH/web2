@@ -353,6 +353,11 @@ section:last-of-type {
     background: #000;
 }
 
+/* Hero Content Section - same element as hero */
+.hero-content-section {
+    min-height: 100vh;
+}
+
 .hero-split {
     position: relative;
     z-index: 10;
@@ -367,25 +372,16 @@ section:last-of-type {
     max-width: 50%;
     display: flex;
     align-items: stretch;
+    padding: 6rem 2rem 6rem 6rem;
 }
 
 .hero-splash-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: top;
     display: block;
-}
-
-/* Hero Content Section */
-.hero-content-section {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: #000;
+    border-radius: 20px;
 }
 
 .cosmic-bg-content {
