@@ -179,83 +179,39 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Initialize EmailJS
-(function() {
-    emailjs.init('sq1rrkucpE7n3EghZ');
-})();
-
-// Form submission with EmailJS
+// Form submission - send to WhatsApp
 const contactForm = document.getElementById('contactForm');
 const formMessage = document.getElementById('formMessage');
 
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    
-    // Hide any previous messages
-    formMessage.className = 'form-message';
-    formMessage.style.display = 'none';
-    
-    // Show loading state
-    submitBtn.textContent = '✨ Sending...';
-    submitBtn.disabled = true;
-    
-    // Get form data
+
     const formData = new FormData(contactForm);
     const data = Object.fromEntries(formData);
-    
-    // Prepare template parameters for EmailJS
-    const templateParams = {
-        name: data.name,
-        email: data.email,
-        phone: `${data.countryCode} ${data.phone}`,
-        country: data.country,
-        message: data.message,
-        time: new Date().toLocaleString('en-AU', { 
-            dateStyle: 'medium', 
-            timeStyle: 'short',
-            timeZone: 'Australia/Melbourne'
-        }),
-        to_email: 'astrologerpsychicrama@gmail.com'
-    };
-    
-    // Send email using EmailJS
-    emailjs.send('service_48eav41', 'template_tbyh4w8', templateParams)
-        .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            
-            // Show success message
-            formMessage.className = 'form-message success';
-            formMessage.innerHTML = '✅ <strong>Success!</strong> Your message has been sent successfully. We will contact you soon!';
-            formMessage.style.display = 'block';
-            
-            // Reset form
-            contactForm.reset();
-            submitBtn.textContent = originalBtnText;
-            submitBtn.disabled = false;
-            
-            // Hide success message after 8 seconds
-            setTimeout(() => {
-                formMessage.style.display = 'none';
-            }, 8000);
-        }, function(error) {
-            console.log('FAILED...', error);
-            
-            // Show error message
-            formMessage.className = 'form-message error';
-            formMessage.innerHTML = '❌ <strong>Oops!</strong> Something went wrong. Please try again or contact us directly via WhatsApp.';
-            formMessage.style.display = 'block';
-            
-            submitBtn.textContent = originalBtnText;
-            submitBtn.disabled = false;
-            
-            // Hide error message after 8 seconds
-            setTimeout(() => {
-                formMessage.style.display = 'none';
-            }, 8000);
-        });
+
+    const message = 
+`🙏 *New Consultation Request*
+
+👤 *Name:* ${data.name}
+📧 *Email:* ${data.email}
+📞 *Phone:* ${data.countryCode} ${data.phone}
+🌍 *Country:* ${data.country}
+💬 *Message:* ${data.message}
+
+🕐 *Time:* ${new Date().toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Australia/Melbourne' })}`;
+
+    const whatsappURL = `https://wa.me/61415812185?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+
+    formMessage.className = 'form-message success';
+    formMessage.innerHTML = '✅ <strong>Redirecting to WhatsApp!</strong> Your details are ready to send.';
+    formMessage.style.display = 'block';
+
+    contactForm.reset();
+
+    setTimeout(() => {
+        formMessage.style.display = 'none';
+    }, 8000);
 });
 
 // Parallax effect for sections
