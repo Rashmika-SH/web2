@@ -200,7 +200,7 @@ contactForm.addEventListener('submit', (e) => {
 
 🕐 *Time:* ${new Date().toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Australia/Melbourne' })}`;
 
-    const whatsappURL = `https://wa.me/61415812185?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/61450411349?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
 
     formMessage.className = 'form-message success';
